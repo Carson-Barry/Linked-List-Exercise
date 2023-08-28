@@ -117,25 +117,103 @@ class LinkedList {
   /** setAt(idx, val): set val at idx to val */
 
   setAt(idx, val) {
-    
+
+    if (idx > this.length-1 || this.length <= 0) {
+      throw new Error("The provided index is invalid!")
+    }
+
+    let currentItem = this.head;
+    for (let i = 0; i <= idx; i++) {
+      if (i === idx) {
+        currentItem.val = val;
+        break;
+      }
+      else {
+        currentItem = currentItem.next;
+      }
+    }
+
   }
 
   /** insertAt(idx, val): add node w/val before idx. */
 
   insertAt(idx, val) {
+    if (idx > this.length) {
+      throw new Error("The provided index is invalid!")
+    }
 
+    //If there are zero items in the list, or the index to add is one more than the final position, just add to the end
+    if (this.length === 0 || idx === this.length) {
+      this.push(val);
+    }
+    //If the index is the first index, unshift to add to beginning of list
+    else if (idx === 0) {
+      this.unshift(val);
+    }
+    //There is more than one item currently in the list, and we are not adding before the first item or after the last item
+    else {
+      let prevItem = null;
+      let currentItem = this.head;
+      for (let i = 0; i <= idx; i++) {
+        if (i === idx) {
+          const newNode = new Node(val)
+          prevItem.next = newNode;
+          newNode.next = currentItem;
+          this.length = this.length + 1;
+          break;
+        }
+        else {
+          prevItem = currentItem;
+          currentItem = currentItem.next;
+        }
+      }
+    }
   }
 
   /** removeAt(idx): return & remove item at idx, */
 
   removeAt(idx) {
 
+    if (idx > this.length - 1) {
+      throw new Error("The provided index is invalid!")
+    }
+    else if (this.length === 1 || idx === this.length - 1) {
+      return (this.pop());
+    }
+    else {
+      let prevItem = null;
+      let currentItem = this.head;
+      for (let i = 0; i < idx; i++) {
+        if (i === idx) {
+          prevItem.next = currentItem.next;
+          this.length = this.length - 1;
+          break;
+        }
+        else {
+          prevItem = currentItem;
+          currentItem = currentItem.next;
+        }
+      }
+    }
+
   }
 
   /** average(): return an average of all values in the list */
 
   average() {
-    
+
+    if (this.length === 0) {
+      return 0;
+    }
+
+    let sum = 0;
+    let currentItem = this.head;
+    for (let i = 0; i < this.length; i++) {
+      sum = sum + currentItem.val;
+      currentItem = currentItem.next
+    }
+    return (sum/this.length);
+
   }
 }
 
